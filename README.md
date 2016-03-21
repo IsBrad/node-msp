@@ -152,7 +152,9 @@ Supported messages are :
   214. MSP_SET_MOTOR
   240. MSP_BIND
   250. MSP_EEPROM_WRITE
+
 ### Recieving
 Messages are decoded as they arrive. Messages will have the name of the command and partially abstracted payload.
+
 ### More
 More information of MSP messages can be found on the [MultiWii wiki](http://www.multiwii.com/wiki/index.php?title=Multiwii_Serial_Protocol)
