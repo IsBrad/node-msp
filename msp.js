@@ -936,3 +936,9 @@ module.exports = {
     }
   }
 };
+
+/*for (var key in messageCodes) {
+  if (messageCodes[key] != undefined) {
+    console.log(key + '. ' + messageCodes[key].name);
+  }
+}*/

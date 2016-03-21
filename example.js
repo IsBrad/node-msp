@@ -6,8 +6,10 @@ var reader = new msp.reader();
 
 var serialport = require('serialport');
 
-var port = new serialport.SerialPort('/dev/cu.PL2303-00001014', {
-  baudrate : 115200
+var portLocation = '/dev/cu.PL2303-00001014'; //Path to serialport
+
+var port = new serialport.SerialPort(portLocation, {
+  baudrate : 115200 //Usual baud rate for flight controller
 });
 
 reader.on('error', function (error) {
