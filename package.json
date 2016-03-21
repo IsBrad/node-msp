@@ -1,0 +1,36 @@
+{
+  "name": "node-msp",
+  "version": "0.1.0",
+  "description": "MultiWii serial protocol library specialised for cleanflight",
+  "main": "msp.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IsBrad/node-msp.git"
+  },
+  "keywords": [
+    "node",
+    "msp",
+    "MultiWii",
+    "serial",
+    "protocol",
+    "cleanflight",
+    "baseflight",
+    "quadcopter",
+    "quadrotor",
+    "multirotor",
+    "drone",
+    "beaglebone",
+    "black",
+    "raspberry",
+    "pi"
+  ],
+  "author": "Brad Turner",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/IsBrad/node-msp/issues"
+  },
+  "homepage": "https://github.com/IsBrad/node-msp"
+}
