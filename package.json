@@ -1,6 +1,6 @@
 {
   "name": "node-msp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "MultiWii serial protocol library specialised for cleanflight",
   "main": "msp.js",
   "scripts": {
