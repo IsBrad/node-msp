@@ -728,6 +728,17 @@ var messageCodes = {
   }
 };
 
+//Lookup message name and return code
+var lookupMessageCode = function (type) {
+
+  //So we can pass a hole message quickly
+  if (typeof type == 'object') type = type.type;
+
+  for (var key in messageCodes) {
+    if (messageCodes[key].name.toUpperCase() == type.toUpperCase()) return key;
+  }
+};
+
 var mspReader = function () {
   var _self = this;
 
@@ -748,6 +759,7 @@ var mspReader = function () {
   };
 
   this.changeState = function (newState) {
+    //console.log(newState);
     //Change the state
     parsing = newState;
 
@@ -767,8 +779,28 @@ var mspReader = function () {
 
     } else {
       //The message code is recognised
-      if (messageInfo.size == message.parts.length) {
-        _self.emit('message', messageInfo.handler(message.parts));
+      if (messageInfo.size == message.parts.length || (messageInfo.size == undefined && message.parts.length == 0)) {
+
+        if (messageInfo.size == undefined) {
+
+          //Message is a confirmation response
+          //This means we have no data to return
+          _self.emit('message', {
+            id : message.id,
+            type : messageCodes[message.id].name,
+            status : 'success'
+          });
+
+        } else {
+
+          //Was a message with a payload, return normally
+          var returnData = messageInfo.handler(message.parts);
+
+          //Add the id number (code) into the message
+          returnData.id = message.id;
+          _self.emit('message', returnData);
+
+        }
 
         //Reset the state to restart
         _self.changeState('header');
@@ -832,7 +864,14 @@ var mspReader = function () {
         //console.log('Message type : ', message.id);
 
         //Progress state
-        _self.changeState('payload');
+        if (messageLength == 0) {
+          //Message length zero thus there IS NO payload
+          _self.changeState('checksum');
+        } else {
+          //Message length is more than zero thus there IS a payload
+          _self.changeState('payload');
+        }
+
 
         return;
       }
@@ -875,18 +914,33 @@ util.inherits(mspReader, eventEmitter);
 
 module.exports = {
   reader : mspReader,
+
+  lookup : lookupMessageCode,
+
   send : function (code, optionsInput) {
+
     function shallowCopy(o) {
       var copy = Object.create(o);
       for (prop in o) {
         if (o.hasOwnProperty(prop)) {
-          copy[prop] = o[prop];
+          if (typeof o[prop] == 'object') {
+            copy[prop] = shallowCopy(o[prop]);
+          } else {
+            copy[prop] = o[prop];
+          }
         }
       }
       return copy;
     }
-    var options = shallowCopy(optionsInput); //Prevent byref funcion arg!!!
-    if (options == undefined) options = {};
+
+    var options;
+    if (optionsInput == undefined || optionsInput == null) {
+      options = {};
+    } else {
+      options = shallowCopy(optionsInput); //Prevent byref funcion arg!!!
+    }
+
+    //console.log(options);
 
     if (typeof code === 'string') {
       for (var key in messageCodes) {
